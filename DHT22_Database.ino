@@ -24,9 +24,7 @@ void setup() {
   pinMode(Led_OnBoard, OUTPUT);
  
   WiFi.mode(WIFI_STA);
-  //WiFi.begin("LAN1", "1-Tiga-0_OK_ya");
-  //WiFi.begin("WAP01/02", "Ifars-LabMicro");
-  WiFi.begin("WAP04/01-GedungC", "Ifars_GedungC");
+  WiFi.begin("SSID", "Password");
   while ((!(WiFi.status() == WL_CONNECTED))) {
     delay(500);
     Serial.print(".");
