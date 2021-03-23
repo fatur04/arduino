@@ -13,16 +13,9 @@ int Led_OnBoard = 2;
 #define SERVER_IP "192.168.140.99"
 
 #ifndef STASSID
-//#define STASSID "WAP04/01-GedungC"
-//#define STAPSK  "Ifars_GedungC"
-//#define STASSID "LAN1"
-//#define STAPSK  "1-Tiga-0_OK_ya"
-#define STASSID "WAP01/02"
-#define STAPSK  "Ifars-LabMicro"
+#define STASSID "SSID"
+#define STAPSK  "password"
 #endif
-
-float t = 0.7;
-float h = 0.5;
 
 void setup() {
 
@@ -76,39 +69,44 @@ void loop() {
     WiFiClient client;
     HTTPClient http;
 
+    //kalibrasi
+    float Ksuhu = t-2.2;
+    float Klembab = h+5.5;
+
     String suhu, kelembaban, postData;
     
-    suhu = String(t); 
-    kelembaban = String(h);
+    suhu = String(Ksuhu); //sensor suhu diubah menjadi string
+    kelembaban = String(Klembab); //sensor kelembaban di ubah menjadi string
     postData = "suhu=" + suhu + "&kelembaban=" + kelembaban + "&ruang=" + ruang + "&id_alat=" + id_alat ;
 
     http.begin("http://192.168.140.99/iot/monitoring-suhu/update.php");  
     http.addHeader("Content-Type", "application/x-www-form-urlencoded");           
 
   int httpCode = http.POST(postData);
+  delay(9940);
   String payload = http.getString();
 
   Serial.print("data yang dikirim ");
   Serial.print("Temperature: ");
-  Serial.print(t);
+  Serial.print(Ksuhu);
   Serial.print(" *C\t");
   Serial.print("Humidity: ");
-  Serial.print(h);
+  Serial.print(Klembab);
   Serial.println(" %");
 
   lcd.backlight();
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Suhu : ");
-  lcd.print(t );
+  lcd.print(Ksuhu);
   lcd.print(" ");
   lcd.print((char)223);
   lcd.print("C");
   lcd.setCursor(0,1);
   lcd.print("Lembab : ");
-  lcd.print(h);
+  lcd.print(Klembab);
   lcd.print(" %");
-  delay(1800000);
+  
     
   http.end();
   }
